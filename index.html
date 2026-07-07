@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora 30 días laborados · $7.000/hora</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(145deg, #0b2a3b 0%, #1a3f52 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .card {
+            max-width: 820px;
+            width: 100%;
+            background: #f6fafc;
+            border-radius: 48px 48px 40px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            padding: 28px 30px 36px;
+            transition: 0.25s;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b2a3b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            border-bottom: 3px solid #f4b942;
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #2b5f7a;
+            margin-left: 6px;
+        }
+        .subhead {
+            color: #1f4b62;
+            font-weight: 500;
+            margin: 6px 0 22px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .valor-hora {
+            background: #1f4b62;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .navegador {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #e7f0f5;
+            padding: 12px 18px;
+            border-radius: 60px;
+            margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navegador .dia-info {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #0b2a3b;
+            background: white;
+            padding: 6px 22px;
+            border-radius: 40px;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .btn-nav {
+            background: #1f4b62;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 10px 24px;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0b2a3b;
+            transition: 0.06s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-nav:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #0b2a3b;
+        }
+        .btn-nav:disabled {
+            opacity: 0.4;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0b2a3b;
+            pointer-events: none;
+        }
+        .form-dia {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+            background: #e7f0f5;
+            padding: 20px 22px;
+            border-radius: 36px;
+            margin-bottom: 18px;
+        }
+        .campo {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .campo label {
+            font-weight: 600;
+            color: #0b2a3b;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+        }
+        .campo input {
+            background: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #0b2a3b;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+            border: 2px solid transparent;
+            width: 100%;
+        }
+        .campo input:focus {
+            outline: none;
+            border-color: #f4b942;
+            box-shadow: 0 0 0 3px rgba(244, 185, 66, 0.25);
+        }
+        .campo input[type="date"] {
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0 18px;
+        }
+        .btn {
+            background: #1f4b62;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #0b2a3b;
+            transition: 0.06s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #0b2a3b;
+        }
+        .btn-secondary {
+            background: #f4b942;
+            box-shadow: 0 5px 0 #b8831e;
+            color: #0b2a3b;
+        }
+        .btn-secondary:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #b8831e;
+        }
+        .btn-success {
+            background: #2a9d8f;
+            box-shadow: 0 5px 0 #1a6b62;
+        }
+        .btn-success:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #1a6b62;
+        }
+        .resultados {
+            background: white;
+            border-radius: 32px;
+            padding: 20px 24px 24px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.04), 0 6px 12px rgba(0,0,0,0.08);
+            margin-top: 6px;
+        }
+        .resumen {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+        }
+        .resumen-item {
+            background: #eef5f9;
+            padding: 8px 18px;
+            border-radius: 40px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .resumen-item span:first-child {
+            font-weight: 500;
+            color: #1f4b62;
+        }
+        .resumen-item .numero {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #0b2a3b;
+        }
+        .total-pago {
+            background: #f4b942;
+            padding: 14px 28px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            justify-content: center;
+            box-shadow: 0 2px 12px rgba(244, 185, 66, 0.4);
+        }
+        .total-pago .label {
+            font-weight: 600;
+            color: #0b2a3b;
+            font-size: 1.2rem;
+        }
+        .total-pago .monto {
+            font-weight: 800;
+            font-size: 2.2rem;
+            color: #0b2a3b;
+            letter-spacing: 1px;
+        }
+        .progreso {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #1f4b62;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #d3e2ea;
+            font-weight: 500;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .progreso span {
+            background: #e7f0f5;
+            padding: 2px 14px;
+            border-radius: 30px;
+        }
+        .error-msg {
+            color: #b13e3e;
+            background: #ffe2e2;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            margin-top: 6px;
+            text-align: center;
+            display: none;
+        }
+        .error-msg.visible {
+            display: block;
+        }
+        .leyenda {
+            font-size: 0.8rem;
+            color: #1f4b62;
+            text-align: center;
+            margin-top: 14px;
+            border-top: 1px solid #d3e2ea;
+            padding-top: 14px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 16px; }
+            .form-dia { grid-template-columns: 1fr; gap: 12px; }
+            .navegador { flex-direction: column; }
+            .resumen { flex-direction: column; align-items: stretch; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>
+        📆 30 Días Laborados
+        <small>· $7.000 / hora</small>
+    </h1>
+    <div class="subhead">
+        <span>⏱️ Registro día por día (hasta madrugada)</span>
+        <span class="valor-hora">💰 $7.000</span>
+    </div>
+
+    <!-- Navegador de días -->
+    <div class="navegador">
+        <button class="btn-nav" id="prevDiaBtn">◀ Día anterior</button>
+        <span class="dia-info" id="diaInfo">Día 1 / 30</span>
+        <button class="btn-nav" id="nextDiaBtn">Día siguiente ▶</button>
+    </div>
+
+    <!-- Formulario del día actual -->
+    <form id="formDia" class="form-dia">
+        <div class="campo">
+            <label for="fechaInicio">📆 Fecha apertura</label>
+            <input type="date" id="fechaInicio" required>
+        </div>
+        <div class="campo">
+            <label for="horaApertura">🕒 Hora apertura</label>
+            <input type="time" id="horaApertura" required>
+        </div>
+        <div class="campo">
+            <label for="fechaCierre">📆 Fecha cierre</label>
+            <input type="date" id="fechaCierre" required>
+        </div>
+        <div class="campo">
+            <label for="horaCierre">🕒 Hora cierre</label>
+            <input type="time" id="horaCierre" required>
+        </div>
+    </form>
+
+    <div class="acciones">
+        <button class="btn btn-success" id="guardarDiaBtn">💾 Guardar día</button>
+        <button class="btn btn-secondary" id="limpiarTodoBtn">↺ Reiniciar 30 días</button>
+    </div>
+
+    <div id="errorMsg" class="error-msg">⚠️ Revisá fechas y horarios.</div>
+
+    <div class="resultados">
+        <div class="resumen">
+            <div class="resumen-item">
+                <span>⏳ Horas totales</span>
+                <span class="numero" id="horasDisplay">0.00</span>
+            </div>
+            <div class="resumen-item">
+                <span>📅 Días registrados</span>
+                <span class="numero" id="diasRegistrados">0 / 30</span>
+            </div>
+        </div>
+        <div class="total-pago">
+            <span class="label">💰 Total a pagar (30 días)</span>
+            <span class="monto" id="pagoDisplay">$0</span>
+        </div>
+        <div class="progreso">
+            <span id="progresoTexto">Progreso: 0 / 30 días</span>
+            <span id="promedioHoras">Promedio: 0.00 h/día</span>
+        </div>
+        <div class="leyenda">
+            ⏱️ 1 hora = $7.000 · Cada día puede cruzar la madrugada
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const VALOR_HORA = 7000;
+        const TOTAL_DIAS = 30;
+
+        // Estado: arreglo de 30 días, cada día = { fechaInicio, horaApertura, fechaCierre, horaCierre, horas }
+        // inicializamos vacío (null)
+        let dias = new Array(TOTAL_DIAS).fill(null);
+        let indiceActual = 0; // 0-based
+
+        // DOM refs
+        const fechaInicio = document.getElementById('fechaInicio');
+        const horaApertura = document.getElementById('horaApertura');
+        const fechaCierre = document.getElementById('fechaCierre');
+        const horaCierre = document.getElementById('horaCierre');
+        const diaInfo = document.getElementById('diaInfo');
+        const prevDiaBtn = document.getElementById('prevDiaBtn');
+        const nextDiaBtn = document.getElementById('nextDiaBtn');
+        const guardarDiaBtn = document.getElementById('guardarDiaBtn');
+        const limpiarTodoBtn = document.getElementById('limpiarTodoBtn');
+        const errorMsg = document.getElementById('errorMsg');
+
+        const horasDisplay = document.getElementById('horasDisplay');
+        const diasRegistrados = document.getElementById('diasRegistrados');
+        const pagoDisplay = document.getElementById('pagoDisplay');
+        const progresoTexto = document.getElementById('progresoTexto');
+        const promedioHoras = document.getElementById('promedioHoras');
+
+        // ========== Funciones auxiliares ==========
+        function calcularHorasDelDia(fInicio, hApertura, fCierre, hCierre) {
+            const aperturaStr = `${fInicio}T${hApertura}:00`;
+            const cierreStr = `${fCierre}T${hCierre}:00`;
+            const apertura = new Date(aperturaStr);
+            const cierre = new Date(cierreStr);
+
+            if (isNaN(apertura.getTime()) || isNaN(cierre.getTime())) {
+                return null;
+            }
+            if (apertura.getTime() > cierre.getTime()) {
+                return null; // error: apertura después del cierre
+            }
+            const diffMs = cierre.getTime() - apertura.getTime();
+            return diffMs / (1000 * 60 * 60); // horas
+        }
+
+        // Cargar el día actual en el formulario
+        function cargarDiaEnFormulario(indice) {
+            const dia = dias[indice];
+            if (dia) {
+                fechaInicio.value = dia.fechaInicio;
+                horaApertura.value = dia.horaApertura;
+                fechaCierre.value = dia.fechaCierre;
+                horaCierre.value = dia.horaCierre;
+            } else {
+                // Día vacío: sugerir fechas automáticas
+                const hoy = new Date();
+                // fecha inicio: hoy + indice días
+                const fechaBase = new Date(hoy);
+                fechaBase.setDate(hoy.getDate() + indice);
+                const fechaBaseStr = fechaBase.toISOString().split('T')[0];
+                // fecha cierre: mismo día + 1 (para madrugada)
+                const fechaCierreSugerida = new Date(fechaBase);
+                fechaCierreSugerida.setDate(fechaBase.getDate() + 1);
+                const fechaCierreStr = fechaCierreSugerida.toISOString().split('T')[0];
+
+                fechaInicio.value = fechaBaseStr;
+                horaApertura.value = '08:00';
+                fechaCierre.value = fechaCierreStr;
+                horaCierre.value = '17:00';
+            }
+            // Actualizar info del día
+            diaInfo.textContent = `Día ${indice + 1} / ${TOTAL_DIAS}`;
+            // Actualizar botones de navegación
+            prevDiaBtn.disabled = (indice === 0);
+            nextDiaBtn.disabled = (indice === TOTAL_DIAS - 1);
+        }
+
+        // Guardar el día actual desde el formulario
+        function guardarDiaActual() {
+            errorMsg.classList.remove('visible');
+
+            const fInicio = fechaInicio.value;
+            const hApertura = horaApertura.value;
+            const fCierre = fechaCierre.value;
+            const hCierre = horaCierre.value;
+
+            if (!fInicio || !hApertura || !fCierre || !hCierre) {
+                errorMsg.textContent = '⚠️ Todos los campos son obligatorios.';
+                errorMsg.classList.add('visible');
+                return false;
+            }
+
+            // Calcular horas para validar
+            const horas = calcularHorasDelDia(fInicio, hApertura, fCierre, hCierre);
+            if (horas === null) {
+                errorMsg.textContent = '⚠️ La apertura debe ser anterior al cierre. Revisá fechas y horas.';
+                errorMsg.classList.add('visible');
+                return false;
+            }
+
+            // Guardar
+            dias[indiceActual] = {
+                fechaInicio: fInicio,
+                horaApertura: hApertura,
+                fechaCierre: fCierre,
+                horaCierre: hCierre,
+                horas: horas
+            };
+
+            actualizarResumenGlobal();
+            // Recargar el mismo día para mostrar datos guardados (aunque ya están)
+            cargarDiaEnFormulario(indiceActual);
+            return true;
+        }
+
+        // Actualizar resumen global (totales, promedio, pago)
+        function actualizarResumenGlobal() {
+            let totalHoras = 0;
+            let count = 0;
+            for (let i = 0; i < TOTAL_DIAS; i++) {
+                if (dias[i]) {
+                    totalHoras += dias[i].horas;
+                    count++;
+                }
+            }
+
+            const promedio = count > 0 ? totalHoras / count : 0;
+            const pago = totalHoras * VALOR_HORA;
+
+            horasDisplay.textContent = totalHoras.toFixed(2);
+            diasRegistrados.textContent = `${count} / ${TOTAL_DIAS}`;
+            pagoDisplay.textContent = new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(pago).replace('COP', '$');
+
+            progresoTexto.textContent = `Progreso: ${count} / ${TOTAL_DIAS} días`;
+            promedioHoras.textContent = `Promedio: ${promedio.toFixed(2)} h/día`;
+        }
+
+        // Reiniciar todos los días
+        function reiniciarTodos() {
+            dias = new Array(TOTAL_DIAS).fill(null);
+            indiceActual = 0;
+            // Sugerir fechas automáticas para el día 0
+            const hoy = new Date();
+            const fechaBase = new Date(hoy);
+            fechaBase.setDate(hoy.getDate());
+            const fechaBaseStr = fechaBase.toISOString().split('T')[0];
+            const fechaCierreSugerida = new Date(fechaBase);
+            fechaCierreSugerida.setDate(fechaBase.getDate() + 1);
+            const fechaCierreStr = fechaCierreSugerida.toISOString().split('T')[0];
+
+            fechaInicio.value = fechaBaseStr;
+            horaApertura.value = '08:00';
+            fechaCierre.value = fechaCierreStr;
+            horaCierre.value = '17:00';
+
+            cargarDiaEnFormulario(0);
+            actualizarResumenGlobal();
+            errorMsg.classList.remove('visible');
+        }
+
+        // ========== Eventos ==========
+        // Navegación
+        prevDiaBtn.addEventListener('click', function() {
+            if (indiceActual > 0) {
+                // Guardar automáticamente el día actual antes de cambiar
+                guardarDiaActual();
+                indiceActual--;
+                cargarDiaEnFormulario(indiceActual);
+                actualizarResumenGlobal();
+            }
+        });
+
+        nextDiaBtn.addEventListener('click', function() {
+            if (indiceActual < TOTAL_DIAS - 1) {
+                guardarDiaActual();
+                indiceActual++;
+                cargarDiaEnFormulario(indiceActual);
+                actualizarResumenGlobal();
+            }
+        });
+
+        // Guardar día
+        guardarDiaBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            guardarDiaActual();
+        });
+
+        // Reiniciar
+        limpiarTodoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            reiniciarTodos();
+        });
+
+        // Al cargar la página, inicializar
+        window.addEventListener('DOMContentLoaded', function() {
+            reiniciarTodos();
+        });
+
+        // Tecla Enter en el formulario guarda el día
+        document.getElementById('formDia').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                guardarDiaActual();
+            }
+        });
+
+        // Cuando cambia un campo, no hacemos nada automático, el usuario debe presionar "Guardar día"
+        // pero podemos actualizar la vista si el día ya estaba guardado (lo recargamos)
+        // Al cambiar un campo, solo marcamos que el día ya no está guardado? mejor no complicar.
+        // Dejamos que el usuario guarde explícitamente.
+
+        // Función para cargar datos de ejemplo (30 días con horarios variados)
+        // No la activamos automáticamente, pero dejamos un "truco" con consola
+        window.cargarEjemplo = function() {
+            for (let i = 0; i < TOTAL_DIAS; i++) {
+                const hoy = new Date();
+                const fechaBase = new Date(hoy);
+                fechaBase.setDate(hoy.getDate() + i);
+                const fechaBaseStr = fechaBase.toISOString().split('T')[0];
+                const fechaCierreSugerida = new Date(fechaBase);
+                fechaCierreSugerida.setDate(fechaBase.getDate() + 1);
+                const fechaCierreStr = fechaCierreSugerida.toISOString().split('T')[0];
+
+                // horas variables: entre 6 y 12 horas
+                const horasDia = 6 + Math.random() * 6;
+                const horaInicio = 8 + Math.floor(Math.random() * 4); // 8 a 11
+                const horaFin = horaInicio + Math.floor(horasDia);
+                const minutos = Math.floor(Math.random() * 60);
+                const minutosFin = Math.floor(Math.random() * 60);
+
+                const hInicioStr = `${String(horaInicio).padStart(2,'0')}:${String(minutos).padStart(2,'0')}`;
+                const hFinStr = `${String(horaFin).padStart(2,'0')}:${String(minutosFin).padStart(2,'0')}`;
+
+                dias[i] = {
+                    fechaInicio: fechaBaseStr,
+                    horaApertura: hInicioStr,
+                    fechaCierre: fechaCierreStr,
+                    horaCierre: hFinStr,
+                    horas: horasDia
+                };
+            }
+            indiceActual = 0;
+            cargarDiaEnFormulario(0);
+            actualizarResumenGlobal();
+            errorMsg.classList.remove('visible');
+        };
+        // En consola: cargarEjemplo() para llenar 30 días aleatorios
+        console.log('📦 Para cargar 30 días de ejemplo, escribí: cargarEjemplo()');
+    })();
+</script>
+
+</body>
+</html>
